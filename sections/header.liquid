@@ -1,0 +1,321 @@
+{%- comment -%} sections/header.liquid {%- endcomment -%}
+
+<header
+  class="header{% if section.settings.sticky_header %} header--sticky{% endif %}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="container header__inner">
+
+    {%- comment -%} Logo {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="header__logo-link" aria-label="{{ shop.name }}">
+      {%- if section.settings.logo != blank -%}
+        {{
+          section.settings.logo
+          | image_url: width: 300
+          | image_tag:
+            class: 'header__logo-image',
+            alt: section.settings.logo.alt | default: shop.name,
+            width: section.settings.logo.width,
+            height: section.settings.logo.height,
+            loading: 'eager'
+        }}
+      {%- else -%}
+        <span class="header__logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} Desktop navigation {%- endcomment -%}
+    {%- if section.settings.menu != blank -%}
+      <nav class="header__nav" aria-label="Main navigation">
+        <ul class="header__nav-list" role="list">
+          {%- for link in linklists[section.settings.menu].links -%}
+            <li class="header__nav-item">
+              
+                href="{{ link.url }}"
+                class="header__nav-link{% if link.active %} header__nav-link--active{% endif %}"
+                {% if link.active %}aria-current="page"{% endif %}
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- comment -%} Header actions {%- endcomment -%}
+    <div class="header__actions">
+
+      {%- comment -%} Cart icon {%- endcomment -%}
+      
+        href="{{ routes.cart_url }}"
+        class="header__action-btn header__cart-btn"
+        aria-label="Cart ({{ cart.item_count }} items)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Mobile menu toggle {%- endcomment -%}
+      <button
+        type="button"
+        class="header__action-btn header__menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  {%- comment -%} Mobile menu {%- endcomment -%}
+  <div
+    id="mobile-menu"
+    class="header__mobile-menu"
+    hidden
+    aria-label="Mobile navigation"
+  >
+    <div class="container">
+      {%- if section.settings.menu != blank -%}
+        <nav>
+          <ul class="header__mobile-nav-list" role="list">
+            {%- for link in linklists[section.settings.menu].links -%}
+              <li>
+                
+                  href="{{ link.url }}"
+                  class="header__mobile-nav-link{% if link.active %} header__mobile-nav-link--active{% endif %}"
+                  {% if link.active %}aria-current="page"{% endif %}
+                >
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    </div>
+  </div>
+
+</header>
+
+{%- comment -%} Mobile menu behaviour {%- endcomment -%}
+<script>
+  (function () {
+    const toggle = document.querySelector('.header__menu-toggle');
+    const menu   = document.getElementById('mobile-menu');
+
+    if (!toggle || !menu) return;
+
+    toggle.addEventListener('click', function () {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+      if (isOpen) {
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        menu.setAttribute('hidden', '');
+        window.Foundry.removeTrapFocus(menu);
+      } else {
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+        menu.removeAttribute('hidden');
+        window.Foundry.trapFocus(menu);
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        menu.setAttribute('hidden', '');
+        window.Foundry.removeTrapFocus(menu);
+        toggle.focus();
+      }
+    });
+  })();
+</script>
+
+{% style %}
+  .header {
+    position: relative;
+    z-index: var(--z-sticky);
+    background: var(--color-bg);
+    border-bottom: var(--border);
+  }
+
+  .header--sticky {
+    position: sticky;
+    top: 0;
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    height: 4rem;
+  }
+
+  /* --- Logo --- */
+
+  .header__logo-link {
+    flex-shrink: 0;
+  }
+
+  .header__logo-image {
+    max-height: 2.5rem;
+    width: auto;
+  }
+
+  .header__logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+
+  /* --- Desktop nav --- */
+
+  .header__nav {
+    display: none;
+  }
+
+  .header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .header__nav-link {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-subtle);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__nav-link:hover,
+  .header__nav-link--active {
+    color: var(--color-text);
+  }
+
+  /* --- Actions --- */
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .header__action-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--color-text);
+    border-radius: var(--radius-md);
+    transition: background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__action-btn:hover {
+    background: var(--color-bg-muted);
+    color: var(--color-text);
+  }
+
+  /* --- Cart count badge --- */
+
+  .header__cart-count {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    min-width: 1.1rem;
+    height: 1.1rem;
+    padding-inline: 0.2rem;
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1rem;
+    text-align: center;
+    border-radius: var(--radius-full);
+  }
+
+  /* --- Mobile menu --- */
+
+  .header__mobile-menu {
+    border-top: var(--border);
+    padding-block: var(--space-4);
+  }
+
+  .header__mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header__mobile-nav-link {
+    display: block;
+    padding-block: var(--space-3);
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-subtle);
+    border-bottom: var(--border);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__mobile-nav-link:hover,
+  .header__mobile-nav-link--active {
+    color: var(--color-text);
+  }
+
+  /* --- Responsive — show desktop nav, hide mobile toggle --- */
+
+  @media (min-width: 768px) {
+    .header__nav {
+      display: block;
+    }
+
+    .header__menu-toggle {
+      display: none;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Navigation menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "default": true,
+      "label": "Enable sticky header"
+    }
+  ]
+}
+{% endschema %}

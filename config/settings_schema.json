@@ -1,0 +1,154 @@
+[
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "helvetica_neue_n7",
+        "label": "Heading font"
+      },
+      {
+        "type": "range",
+        "id": "heading_base_size",
+        "min": 70,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading size scale",
+        "default": 100,
+        "info": "Adjusts heading sizes proportionally across the theme"
+      },
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "helvetica_neue_n4",
+        "label": "Body font"
+      },
+      {
+        "type": "range",
+        "id": "body_base_size",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Body base size",
+        "default": 16
+      }
+    ]
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary colour",
+        "default": "#0ea5e9"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_hover",
+        "label": "Primary hover colour",
+        "default": "#0284c7"
+      },
+      {
+        "type": "header",
+        "content": "Text"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Body text",
+        "default": "#18181b"
+      },
+      {
+        "type": "color",
+        "id": "color_text_subtle",
+        "label": "Subtle text",
+        "default": "#52525b"
+      },
+      {
+        "type": "header",
+        "content": "Backgrounds"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Page background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_subtle",
+        "label": "Subtle background",
+        "default": "#fafafa"
+      },
+      {
+        "type": "header",
+        "content": "Borders"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border colour",
+        "default": "#e4e4e7"
+      }
+    ]
+  },
+  {
+    "name": "Buttons",
+    "settings": [
+      {
+        "type": "select",
+        "id": "button_radius",
+        "label": "Button shape",
+        "default": "4px",
+        "options": [
+          { "value": "0px",    "label": "Square" },
+          { "value": "4px",    "label": "Slight round" },
+          { "value": "8px",    "label": "Rounded" },
+          { "value": "9999px", "label": "Pill" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "layout_content_max",
+        "min": 1000,
+        "max": 1600,
+        "step": 40,
+        "unit": "px",
+        "label": "Maximum content width",
+        "default": 1280
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be resized to 32×32px"
+      }
+    ]
+  }
+]

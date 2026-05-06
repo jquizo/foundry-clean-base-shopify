@@ -1,0 +1,222 @@
+/* =============================================================================
+   FOUNDRY — Design Tokens
+   assets/tokens.css
+
+   All design decisions live here as CSS custom properties.
+   Load order: tokens.css → base.css → section styles
+   Never write a raw colour, size, or duration anywhere else in the theme.
+   ============================================================================= */
+
+:root {
+
+  /* ---------------------------------------------------------------------------
+     COLOUR — Palette
+     Raw colour values. Don't use these directly in components;
+     use the semantic aliases below so swapping themes stays easy.
+  --------------------------------------------------------------------------- */
+
+  --color-white:       #ffffff;
+  --color-black:       #0a0a0a;
+
+  /* Neutrals — 50 (lightest) → 900 (darkest) */
+  --color-neutral-50:  #fafafa;
+  --color-neutral-100: #f4f4f5;
+  --color-neutral-200: #e4e4e7;
+  --color-neutral-300: #d1d1d6;
+  --color-neutral-400: #a1a1aa;
+  --color-neutral-500: #71717a;
+  --color-neutral-600: #52525b;
+  --color-neutral-700: #3f3f46;
+  --color-neutral-800: #27272a;
+  --color-neutral-900: #18181b;
+
+  /* Brand — override these per-project */
+  --color-brand-50:    #f0f9ff;
+  --color-brand-100:   #e0f2fe;
+  --color-brand-200:   #bae6fd;
+  --color-brand-300:   #7dd3fc;
+  --color-brand-400:   #38bdf8;
+  --color-brand-500:   #0ea5e9;  /* Primary brand colour */
+  --color-brand-600:   #0284c7;
+  --color-brand-700:   #0369a1;
+  --color-brand-800:   #075985;
+  --color-brand-900:   #0c4a6e;
+
+  /* Semantic — feedback colours */
+  --color-success:     #16a34a;
+  --color-warning:     #d97706;
+  --color-error:       #dc2626;
+  --color-info:        #2563eb;
+
+  /* ---------------------------------------------------------------------------
+     COLOUR — Semantic Aliases
+     Use these in components. Changing a theme means only touching this block.
+  --------------------------------------------------------------------------- */
+
+  /* Surface */
+  --color-bg:              var(--color-white);
+  --color-bg-subtle:       var(--color-neutral-50);
+  --color-bg-muted:        var(--color-neutral-100);
+
+  /* Text */
+  --color-text:            var(--color-neutral-900);
+  --color-text-subtle:     var(--color-neutral-600);
+  --color-text-muted:      var(--color-neutral-400);
+  --color-text-inverse:    var(--color-white);
+
+  /* Border */
+  --color-border:          var(--color-neutral-200);
+  --color-border-strong:   var(--color-neutral-300);
+
+  /* Interactive */
+  --color-primary:         var(--color-brand-500);
+  --color-primary-hover:   var(--color-brand-600);
+  --color-primary-text:    var(--color-white);
+
+  /* ---------------------------------------------------------------------------
+     TYPOGRAPHY — Families
+     Shopify injects font face declarations via settings_schema.json.
+     These vars are overridden in theme.liquid if the merchant picks a font.
+     Fall back to safe system stacks.
+  --------------------------------------------------------------------------- */
+
+  --font-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:    'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+
+  /* ---------------------------------------------------------------------------
+     TYPOGRAPHY — Scale
+     Uses clamp() for fluid type that scales between viewport breakpoints.
+     Pattern: clamp(min, preferred-vw, max)
+  --------------------------------------------------------------------------- */
+
+  --text-xs:   clamp(0.694rem,  0.66rem  + 0.18vw, 0.75rem);   /*  ~11–12px */
+  --text-sm:   clamp(0.833rem,  0.79rem  + 0.21vw, 0.875rem);  /*  ~13–14px */
+  --text-base: clamp(1rem,      0.95rem  + 0.25vw, 1rem);       /*  16px     */
+  --text-md:   clamp(1.125rem,  1.07rem  + 0.28vw, 1.25rem);   /*  ~18–20px */
+  --text-lg:   clamp(1.266rem,  1.2rem   + 0.33vw, 1.5rem);    /*  ~20–24px */
+  --text-xl:   clamp(1.424rem,  1.35rem  + 0.37vw, 1.875rem);  /*  ~23–30px */
+  --text-2xl:  clamp(1.602rem,  1.5rem   + 0.51vw, 2.25rem);   /*  ~26–36px */
+  --text-3xl:  clamp(1.802rem,  1.65rem  + 0.76vw, 3rem);      /*  ~29–48px */
+  --text-4xl:  clamp(2.027rem,  1.8rem   + 1.13vw, 3.75rem);   /*  ~32–60px */
+
+  /* ---------------------------------------------------------------------------
+     TYPOGRAPHY — Weights & Leading
+  --------------------------------------------------------------------------- */
+
+  --font-weight-regular:   400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+
+  --leading-tight:    1.2;
+  --leading-snug:     1.35;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.65;
+  --leading-loose:    1.8;
+
+  --tracking-tight:   -0.02em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.04em;
+  --tracking-wider:    0.08em;
+
+  /* ---------------------------------------------------------------------------
+     SPACING — Scale
+     Base unit: 4px. Each step doubles or adds 4px.
+     Use these for margin, padding, gap — never raw px values.
+  --------------------------------------------------------------------------- */
+
+  --space-0:    0;
+  --space-px:   1px;
+  --space-1:    0.25rem;   /*  4px  */
+  --space-2:    0.5rem;    /*  8px  */
+  --space-3:    0.75rem;   /* 12px  */
+  --space-4:    1rem;      /* 16px  */
+  --space-5:    1.25rem;   /* 20px  */
+  --space-6:    1.5rem;    /* 24px  */
+  --space-8:    2rem;      /* 32px  */
+  --space-10:   2.5rem;    /* 40px  */
+  --space-12:   3rem;      /* 48px  */
+  --space-16:   4rem;      /* 64px  */
+  --space-20:   5rem;      /* 80px  */
+  --space-24:   6rem;      /* 96px  */
+  --space-32:   8rem;      /* 128px */
+  --space-40:   10rem;     /* 160px */
+  --space-48:   12rem;     /* 192px */
+
+  /* ---------------------------------------------------------------------------
+     LAYOUT
+  --------------------------------------------------------------------------- */
+
+  --layout-content-max:    1280px;  /* Max width for content */
+  --layout-text-max:        680px;  /* Max width for prose/text blocks */
+  --layout-narrow-max:      860px;  /* Narrow layouts (checkout-style) */
+
+  /* Section padding — fluid, collapses on mobile */
+  --section-padding-block: clamp(var(--space-12), 5vw, var(--space-24));
+  --section-padding-inline: clamp(var(--space-4),  4vw, var(--space-8));
+
+  /* Grid */
+  --grid-gap:     var(--space-6);
+  --grid-gap-sm:  var(--space-4);
+  --grid-gap-lg:  var(--space-8);
+
+  /* ---------------------------------------------------------------------------
+     BORDERS & RADII
+  --------------------------------------------------------------------------- */
+
+  --border-width:        1px;
+  --border-width-thick:  2px;
+  --border-style:        solid;
+  --border:              var(--border-width) var(--border-style) var(--color-border);
+
+  --radius-sm:    4px;
+  --radius-md:    8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;  /* Pill shape */
+
+  /* ---------------------------------------------------------------------------
+     SHADOWS — Elevation system
+  --------------------------------------------------------------------------- */
+
+  --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.10), 0 2px 4px -2px rgb(0 0 0 / 0.10);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.10), 0 4px 6px -4px rgb(0 0 0 / 0.10);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.10);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* ---------------------------------------------------------------------------
+     TRANSITIONS
+     Compose these: transition: color var(--duration-fast) var(--ease-out);
+  --------------------------------------------------------------------------- */
+
+  --duration-instant: 50ms;
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+  --duration-slower: 600ms;
+
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);  /* Slight overshoot */
+
+  /* ---------------------------------------------------------------------------
+     Z-INDEX — Named layers
+     Never write a raw z-index number. Name every layer here.
+  --------------------------------------------------------------------------- */
+
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-top:      999;
+
+}
