@@ -1,0 +1,81 @@
+# Foundry
+
+A clean, minimal Shopify base theme built from scratch. Designed to be reused across projects — branch off `main` for each new client.
+
+---
+
+## Tech Stack
+
+- Shopify Liquid
+- Vanilla CSS with custom properties (no frameworks)
+- Vanilla JavaScript (no frameworks)
+- Shopify CLI
+
+## Architecture
+
+### CSS
+| File | Purpose |
+|------|---------|
+| `assets/tokens.css` | All design tokens as CSS custom properties |
+| `assets/base.css` | Reset, base element styles, utility classes |
+| Section `{% style %}` blocks | Component-scoped styles, co-located with markup |
+
+### JavaScript
+| File | Purpose |
+|------|---------|
+| `assets/theme.js` | Pub/sub, Web Components, cart helpers |
+
+### Conventions
+- BEM naming
+- `{%- -%}` whitespace stripping on all Liquid tags
+- `{% render %}` over `{% include %}` for snippets
+- All UI strings in `locales/en.default.json` via the `| t` filter
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js
+- Shopify CLI: `npm install -g @shopify/cli @shopify/theme`
+
+### Dev server
+```bash
+shopify auth login
+shopify theme dev
+```
+
+---
+
+## Starting a Client Project
+
+Branch off `main` to keep the base theme clean:
+
+```bash
+git checkout -b client-name
+```
+
+---
+
+## Build Status
+
+### Complete
+- [x] `layout/theme.liquid`
+- [x] `assets/tokens.css`
+- [x] `assets/base.css`
+- [x] `assets/theme.js`
+- [x] `sections/header.liquid`
+- [x] `sections/footer.liquid`
+- [x] `sections/hero.liquid`
+- [x] `locales/en.default.json`
+- [x] `config/settings_schema.json`
+
+### Planned
+- [ ] `templates/product.json`
+- [ ] `templates/collection.json`
+- [ ] `templates/cart.json`
+- [ ] `templates/page.json`
+- [ ] `templates/404.liquid`
+- [ ] `snippets/product-card.liquid`
+- [ ] `sections/featured-collection.liquid`
+- [ ] `sections/announcement-bar.liquid`

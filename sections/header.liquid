@@ -30,7 +30,7 @@
         <ul class="header__nav-list" role="list">
           {%- for link in linklists[section.settings.menu].links -%}
             <li class="header__nav-item">
-              
+              <a
                 href="{{ link.url }}"
                 class="header__nav-link{% if link.active %} header__nav-link--active{% endif %}"
                 {% if link.active %}aria-current="page"{% endif %}
@@ -47,7 +47,7 @@
     <div class="header__actions">
 
       {%- comment -%} Cart icon {%- endcomment -%}
-      
+      <a
         href="{{ routes.cart_url }}"
         class="header__action-btn header__cart-btn"
         aria-label="Cart ({{ cart.item_count }} items)"
@@ -93,7 +93,7 @@
           <ul class="header__mobile-nav-list" role="list">
             {%- for link in linklists[section.settings.menu].links -%}
               <li>
-                
+                <a
                   href="{{ link.url }}"
                   class="header__mobile-nav-link{% if link.active %} header__mobile-nav-link--active{% endif %}"
                   {% if link.active %}aria-current="page"{% endif %}
