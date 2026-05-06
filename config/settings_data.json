@@ -1,6 +1,21 @@
 {
   "current": {
     "type_header_font": "assistant_n4",
-    "type_body_font": "assistant_n4"
-  }
+    "type_body_font": "assistant_n4",
+    "heading_base_size": 100,
+    "body_base_size": 16,
+
+    "color_primary": "#0ea5e9",
+    "color_primary_hover": "#0284c7",
+    "color_text": "#18181b",
+    "color_text_subtle": "#52525b",
+    "color_bg": "#ffffff",
+    "color_bg_subtle": "#fafafa",
+    "color_border": "#e4e4e7",
+
+    "button_radius": "4px",
+
+    "layout_content_max": 1280
+  },
+  "presets": {}
 }
