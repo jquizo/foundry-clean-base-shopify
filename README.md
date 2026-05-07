@@ -74,13 +74,14 @@ git checkout -b client-name
 - [x] `sections/product.liquid`
 - [x] `sections/collections.liquid`
 - [x] `sections/cart.liquid`
+- [x] `sections/page.liquid`
 - [x] `templates/index.json`
 - [x] `templates/product.json`
 - [x] `templates/cart.json`
+- [x] `templates/page.json`
 
 ### Planned
 - [ ] `templates/collection.json`
-- [ ] `templates/page.json`
 - [ ] `templates/404.liquid`
 - [ ] `snippets/product-card.liquid`
 - [ ] `sections/featured-collection.liquid`

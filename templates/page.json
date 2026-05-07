@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "page": {
+      "type": "page",
+      "blocks": {
+        "page_header": {
+          "type": "page_header",
+          "settings": {
+            "show_breadcrumb": false
+          }
+        },
+        "page_content": {
+          "type": "page_content",
+          "settings": {}
+        },
+        "image": {
+          "type": "image",
+          "settings": {
+            "image_width": "page__image--medium"
+          }
+        },
+        "rich_text": {
+          "type": "rich_text",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "page_header",
+        "page_content",
+        "image",
+        "rich_text"
+      ],
+      "settings": {
+        "content_width": "narrow"
+      }
+    }
+  },
+  "order": ["page"]
+}
