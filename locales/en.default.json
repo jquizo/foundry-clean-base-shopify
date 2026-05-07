@@ -20,6 +20,7 @@
   "actions": {
     "add_to_cart": "Add to cart",
     "sold_out": "Sold out",
+    "on_sale": "Sale",
     "unavailable": "Unavailable",
     "view_all": "View all",
     "learn_more": "Learn more",

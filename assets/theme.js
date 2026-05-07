@@ -205,7 +205,257 @@ customElements.define('foundry-disclosure', FoundryDisclosure);
 
 
 /* -----------------------------------------------------------------------------
-   4. CART HELPERS
+   4. PRODUCT FORM
+   Handles variant selection, image gallery, and quantity stepper
+   on the product page.
+
+   Depends on:
+     - #product-json-{sectionId}  embedded in sections/product.liquid
+     - window.Foundry.strings     set in layout/theme.liquid
+     - Publishes: 'variant:changed' — subscribe in cart drawer etc.
+----------------------------------------------------------------------------- */
+
+class ProductForm extends HTMLElement {
+  connectedCallback() {
+    // ── Refs ──────────────────────────────────────────────────
+    this.form          = this.querySelector('#product-form');
+    this.variantInput  = this.querySelector('[data-variant-id]');
+    this.priceWrap     = this.querySelector('#product-price');
+    this.addToCartBtn  = this.querySelector('[data-add-to-cart]');
+    this.addToCartText = this.querySelector('[data-add-to-cart-text]');
+    this.featuredImg   = document.querySelector('#product-featured-image');
+    this.thumbnails    = this.querySelectorAll('.product__thumbnail');
+
+    // ── Parse product JSON ────────────────────────────────────
+    const sectionId  = this.form?.dataset.sectionId;
+    const dataScript = document.querySelector(`#product-json-${sectionId}`);
+
+    if (!dataScript) return;
+
+    try {
+      this.productData = JSON.parse(dataScript.textContent);
+      this.variants    = this.productData.variants;
+    } catch (e) {
+      console.error('[Foundry] Failed to parse product JSON', e);
+      return;
+    }
+
+    // ── Bind events ───────────────────────────────────────────
+    this.bindVariantPicker();
+    this.bindThumbnails();
+    this.bindQuantityStepper();
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Variant picker
+  // ─────────────────────────────────────────────────────────────
+
+  bindVariantPicker() {
+    const radios = this.querySelectorAll('.product__option-value input[type="radio"]');
+    if (!radios.length) return;
+
+    radios.forEach(radio => {
+      radio.addEventListener('change', () => this.onVariantChange());
+    });
+  }
+
+  /**
+   * Read the currently selected option values, find the matching
+   * variant, then update all dependent UI.
+   */
+  onVariantChange() {
+    const selectedOptions = this.getSelectedOptions();
+    const variant         = this.findVariant(selectedOptions);
+
+    if (!variant) return;
+
+    this.currentVariant = variant;
+    this.updateVariantInput(variant);
+    this.updatePrice(variant);
+    this.updateAddToCart(variant);
+    this.updateFeaturedImage(variant);
+
+    // Publish for any other components that care (e.g. a cart drawer)
+    Foundry.publish('variant:changed', { variant, form: this.form });
+  }
+
+  /**
+   * Returns an array of the currently selected option values,
+   * in option position order [option1, option2, option3].
+   */
+  getSelectedOptions() {
+    const options = {};
+
+    this.querySelectorAll('.product__option-value input[type="radio"]:checked')
+      .forEach(radio => {
+        options[radio.dataset.optionPosition] = radio.value;
+      });
+
+    // Return as ordered array: position 1, 2, 3
+    return Object.keys(options)
+      .sort()
+      .map(pos => options[pos]);
+  }
+
+  /**
+   * Find the variant whose options array matches selectedOptions.
+   */
+  findVariant(selectedOptions) {
+    return this.variants.find(variant =>
+      selectedOptions.every(
+        (val, index) => variant[`option${index + 1}`] === val
+      )
+    );
+  }
+
+  updateVariantInput(variant) {
+    if (this.variantInput) {
+      this.variantInput.value = variant.id;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Price
+  // ─────────────────────────────────────────────────────────────
+
+  updatePrice(variant) {
+    if (!this.priceWrap) return;
+
+    const price        = this.formatMoney(variant.price);
+    const comparePrice = variant.compare_at_price;
+    const available    = variant.available;
+
+    let html = '';
+
+    if (comparePrice && comparePrice > variant.price) {
+      html += `<span class="product__price product__price--sale">${price}</span>`;
+      html += `<s class="product__price product__price--compare">${this.formatMoney(comparePrice)}</s>`;
+      html += `<span class="product__badge product__badge--sale">${window.Foundry.strings?.on_sale ?? 'Sale'}</span>`;
+    } else {
+      html += `<span class="product__price">${price}</span>`;
+    }
+
+    if (!available) {
+      html += `<span class="product__badge product__badge--sold-out">${window.Foundry.strings?.sold_out ?? 'Sold out'}</span>`;
+    }
+
+    this.priceWrap.innerHTML = html;
+  }
+
+  /**
+   * Shopify stores prices as integers in the smallest currency unit
+   * (cents). This converts to a formatted string.
+   * Prefers window.Shopify.formatMoney if available (respects the
+   * store's money format setting), falls back to a plain dollar string.
+   */
+  formatMoney(cents) {
+    if (window.Shopify?.formatMoney) {
+      return window.Shopify.formatMoney(cents, window.Shopify.money_format);
+    }
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Add to cart button
+  // ─────────────────────────────────────────────────────────────
+
+  updateAddToCart(variant) {
+    if (!this.addToCartBtn || !this.addToCartText) return;
+
+    if (variant.available) {
+      this.addToCartBtn.disabled     = false;
+      this.addToCartText.textContent = window.Foundry.strings?.add_to_cart ?? 'Add to cart';
+    } else {
+      this.addToCartBtn.disabled     = true;
+      this.addToCartText.textContent = window.Foundry.strings?.sold_out ?? 'Sold out';
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Featured image
+  // ─────────────────────────────────────────────────────────────
+
+  updateFeaturedImage(variant) {
+    if (!variant.featured_image || !this.featuredImg) return;
+
+    // Shopify gives us the image src on the variant object —
+    // append a size suffix to request the 900px wide version
+    const newSrc = variant.featured_image.src
+      .replace(/(\.[^.]+)$/, '_900x$1');
+
+    this.featuredImg.src = newSrc;
+    this.featuredImg.alt = variant.featured_image.alt ?? '';
+
+    // Sync thumbnail active state to match the new featured image
+    const baseSrc = variant.featured_image.src.split('?')[0];
+    const baseKey = baseSrc.substring(0, baseSrc.lastIndexOf('.'));
+
+    this.thumbnails.forEach(thumb => {
+      thumb.classList.toggle(
+        'is-active',
+        thumb.dataset.imageSrc.includes(baseKey)
+      );
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Thumbnail gallery
+  // ─────────────────────────────────────────────────────────────
+
+  bindThumbnails() {
+    if (!this.thumbnails.length) return;
+
+    this.thumbnails.forEach(thumb => {
+      thumb.addEventListener('click', () => this.onThumbnailClick(thumb));
+    });
+  }
+
+  onThumbnailClick(thumb) {
+    if (!this.featuredImg) return;
+
+    // Swap main image
+    this.featuredImg.src = thumb.dataset.imageSrc;
+    this.featuredImg.alt = thumb.dataset.imageAlt;
+
+    // Update active state
+    this.thumbnails.forEach(t => t.classList.remove('is-active'));
+    thumb.classList.add('is-active');
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Quantity stepper
+  // ─────────────────────────────────────────────────────────────
+
+  bindQuantityStepper() {
+    const minusBtn = this.querySelector('[data-quantity-minus]');
+    const plusBtn  = this.querySelector('[data-quantity-plus]');
+    const input    = this.querySelector('.quantity-input__field');
+
+    if (!minusBtn || !plusBtn || !input) return;
+
+    minusBtn.addEventListener('click', () => {
+      const current = parseInt(input.value, 10);
+      const min     = parseInt(input.min, 10) || 1;
+      if (current > min) {
+        input.value = current - 1;
+      }
+    });
+
+    plusBtn.addEventListener('click', () => {
+      const current = parseInt(input.value, 10);
+      const max     = parseInt(input.max, 10);
+      if (!max || current < max) {
+        input.value = current + 1;
+      }
+    });
+  }
+}
+
+customElements.define('product-form', ProductForm);
+
+
+/* -----------------------------------------------------------------------------
+   5. CART HELPERS
    Thin wrappers around Shopify's Cart API endpoints.
    These publish pub/sub events so any component can react to cart changes.
 ----------------------------------------------------------------------------- */
@@ -245,7 +495,7 @@ window.Foundry.Cart = Cart;
 
 
 /* -----------------------------------------------------------------------------
-   5. INIT
+   6. INIT
    Anything that should run on every page load.
 ----------------------------------------------------------------------------- */
 
