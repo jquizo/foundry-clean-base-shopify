@@ -108,7 +108,7 @@
 
 {% style %}
   .collection {
-    max-width: var(--page-width);
+    max-width: var(--layout-content-max);
     margin: 0 auto;
     padding: var(--space-8) var(--space-4);
   }
@@ -125,7 +125,7 @@
 
   .collection__count {
     color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
+    font-size: var(--text-sm);
     margin-bottom: var(--space-4);
   }
 
@@ -151,17 +151,17 @@
   }
 
   .collection__sort-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     white-space: nowrap;
   }
 
   .collection__sort-select {
-    font-size: var(--font-size-sm);
+    font-size: var(--text-sm);
     padding: var(--space-1) var(--space-3);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    background-color: var(--color-background);
+    background-color: var(--color-bg);
     color: var(--color-text);
     cursor: pointer;
   }
@@ -286,21 +286,21 @@
     padding: 0 var(--space-2);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    font-size: var(--font-size-sm);
+    font-size: var(--text-sm);
     color: var(--color-text);
     text-decoration: none;
     transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
   .collection__pagination .pagination li a:hover {
-    background-color: var(--color-surface);
+    background-color: var(--color-bg-subtle);
     border-color: var(--color-text);
   }
 
   .collection__pagination .pagination li.active span {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
-    color: var(--color-primary-contrast, #fff);
+    color: var(--color-primary-text);
     font-weight: 600;
   }
 {% endstyle %}

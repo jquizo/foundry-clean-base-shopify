@@ -118,6 +118,12 @@
         cart_update_url: '{{ routes.cart_update_url }}',
         cart_url: '{{ routes.cart_url }}'
       };
+      window.Foundry = window.Foundry || {};
+      window.Foundry.strings = {
+        on_sale: {{ 'products.product.on_sale' | t | json }},
+        sold_out: {{ 'products.product.sold_out' | t | json }},
+        add_to_cart: {{ 'products.product.add_to_cart' | t | json }}
+      };
     </script>
 
     <script src="{{ 'theme.js' | asset_url }}" defer></script>

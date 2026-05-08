@@ -73,14 +73,14 @@
 
       {%- if section.settings.btn_label != blank and section.settings.btn_url != blank -%}
         <div class="hero__actions">
-          
+          <a
             href="{{ section.settings.btn_url }}"
             class="btn btn--primary"
           >
             {{ section.settings.btn_label }}
           </a>
           {%- if section.settings.btn_secondary_label != blank and section.settings.btn_secondary_url != blank -%}
-            
+            <a
               href="{{ section.settings.btn_secondary_url }}"
               class="btn btn--secondary"
             >

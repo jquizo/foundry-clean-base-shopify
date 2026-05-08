@@ -12,7 +12,7 @@
 -%}
 
 <section class="product-section" data-section-id="{{ section.id }}">
-  <div class="page-width">
+  <div class="container">
     <div class="product">
 
       {%- comment -%} ───── LEFT: Media ───── {%- endcomment -%}
@@ -214,13 +214,13 @@
 
 {% style %}
   .product-section {
-    padding-block: var(--space-2xl);
+    padding-block: var(--section-padding-block);
   }
 
   .product {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-2xl);
+    gap: var(--space-16);
     align-items: start;
   }
 
@@ -250,9 +250,9 @@
 
   .product__thumbnails {
     display: flex;
-    gap: var(--space-xs);
+    gap: var(--space-2);
     flex-wrap: wrap;
-    margin-top: var(--space-sm);
+    margin-top: var(--space-3);
   }
 
   .product__thumbnail {
@@ -283,7 +283,7 @@
   .product__info {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-8);
   }
 
   .product__title {
@@ -294,7 +294,7 @@
   }
 
   .product__vendor {
-    margin: var(--space-xs) 0 0;
+    margin: var(--space-2) 0 0;
     color: var(--color-text-subtle);
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -305,7 +305,7 @@
   .product__price-wrap {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-3);
     flex-wrap: wrap;
   }
 
@@ -354,7 +354,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -362,7 +362,7 @@
   .product__option-values {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs);
+    gap: var(--space-2);
   }
 
   .product__option-value input[type="radio"] {
@@ -376,7 +376,7 @@
     display: block;
     padding: 0.4em 1em;
     border: 1px solid var(--color-border);
-    border-radius: var(--button-radius);
+    border-radius: var(--radius-btn);
     font-size: 0.875rem;
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s;
@@ -399,7 +399,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -408,7 +408,7 @@
     display: inline-flex;
     align-items: center;
     border: 1px solid var(--color-border);
-    border-radius: var(--button-radius);
+    border-radius: var(--radius-btn);
     overflow: hidden;
   }
 
@@ -452,7 +452,7 @@
   .product__buy-buttons {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-3);
   }
 
   .btn--full {
