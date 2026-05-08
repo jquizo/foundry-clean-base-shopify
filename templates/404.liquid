@@ -8,32 +8,6 @@
     <a href="{{ routes.root_url }}" class="not-found__link">
       {{ 'templates.404.link' | t }}
     </a>
-
-    <form
-      action="{{ routes.search_url }}"
-      method="get"
-      role="search"
-      class="not-found__search"
-    >
-      <label for="not-found-search-input" class="visually-hidden">
-        {{ 'templates.search.placeholder' | t }}
-      </label>
-      <input
-        id="not-found-search-input"
-        type="search"
-        name="q"
-        class="not-found__search-input"
-        placeholder="{{ 'templates.search.placeholder' | t }}"
-        autocomplete="off"
-        spellcheck="false"
-      >
-      <button type="submit" class="not-found__search-btn" aria-label="{{ 'templates.search.title' | t }}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-      </button>
-    </form>
   </div>
 </div>
 
@@ -98,48 +72,5 @@
   .not-found__link:hover {
     background-color: var(--color-primary-hover);
     color: var(--color-primary-text);
-  }
-
-  .not-found__search {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 360px;
-    margin-top: var(--space-4);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
-    background-color: var(--color-bg);
-    transition: border-color var(--duration-fast) var(--ease-out);
-  }
-
-  .not-found__search:focus-within {
-    border-color: var(--color-border-strong);
-  }
-
-  .not-found__search-input {
-    flex: 1;
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--text-sm);
-    color: var(--color-text);
-    background: transparent;
-    border: none;
-    outline: none;
-  }
-
-  .not-found__search-input::placeholder {
-    color: var(--color-text-muted);
-  }
-
-  .not-found__search-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-3);
-    color: var(--color-text-subtle);
-    transition: color var(--duration-fast) var(--ease-out);
-  }
-
-  .not-found__search-btn:hover {
-    color: var(--color-text);
   }
 {% endstyle %}
