@@ -84,9 +84,9 @@ git checkout -b client-name
 - [x] `templates/cart.json`
 - [x] `templates/page.json`
 - [x] `templates/404.liquid`
+- [x] `layout/password.liquid`
 
 ### Not yet built
 - [ ] Blog / article templates and sections
 - [ ] Search template and section
-- [ ] Password page
 - [ ] Gift card template

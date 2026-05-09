@@ -5,6 +5,11 @@
     },
     "pagination": {
       "label": "Pagination"
+    },
+    "password_page": {
+      "password_label": "Password",
+      "login_form_submit": "Enter",
+      "login_form_error": "Wrong password. Please try again."
     }
   },
 
