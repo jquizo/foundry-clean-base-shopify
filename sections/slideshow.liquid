@@ -15,14 +15,20 @@
       >
 
         {%- if block.settings.image != blank -%}
+          {%- assign slide_load_val     = 'lazy' -%}
+          {%- assign slide_priority_val = 'auto' -%}
+          {%- if forloop.first -%}
+            {%- assign slide_load_val     = 'eager' -%}
+            {%- assign slide_priority_val = 'high' -%}
+          {%- endif -%}
           <div class="slideshow__media" aria-hidden="true">
             {{
               block.settings.image
               | image_url: width: 2000
               | image_tag:
                 alt: '',
-                loading: forloop.first | if: 'eager', 'lazy',
-                fetchpriority: forloop.first | if: 'high', 'auto',
+                loading: slide_load_val,
+                fetchpriority: slide_priority_val,
                 sizes: '100vw'
             }}
           </div>
