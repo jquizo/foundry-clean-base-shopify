@@ -131,7 +131,8 @@
       "image_alt_default": "Page image"
     },
     "announcement_bar": {
-      "dismiss": "Dismiss announcement"
+      "toggle_collapse": "Collapse announcement",
+      "toggle_expand": "Expand announcement"
     }
   },
 

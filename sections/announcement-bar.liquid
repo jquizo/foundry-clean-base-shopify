@@ -20,17 +20,15 @@
         <p class="announcement-bar__message">{{ section.settings.message }}</p>
       {%- endif -%}
 
-      {%- if section.settings.show_dismiss -%}
+      {%- if section.settings.show_toggle -%}
         <button
           type="button"
-          class="announcement-bar__dismiss"
-          data-announcement-dismiss
-          aria-label="{{ 'sections.announcement_bar.dismiss' | t }}"
+          class="announcement-bar__toggle"
+          data-announcement-toggle
+          aria-label="{{ 'sections.announcement_bar.toggle_collapse' | t }}"
+          aria-expanded="true"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
+          {%- render 'icon', icon: 'chevron-up', size: 16 -%}
         </button>
       {%- endif -%}
     </div>
@@ -39,21 +37,35 @@
 
 <script>
   (function () {
-    var bar = document.querySelector('[data-announcement-bar]');
-    var btn = document.querySelector('[data-announcement-dismiss]');
-    var storageKey = 'foundry-announcement-{{ section.id }}';
+    var bar    = document.querySelector('[data-announcement-bar]');
+    var btn    = document.querySelector('[data-announcement-toggle]');
+    var key    = 'foundry-announcement-{{ section.id }}';
+    var labelCollapse = {{ 'sections.announcement_bar.toggle_collapse' | t | json }};
+    var labelExpand   = {{ 'sections.announcement_bar.toggle_expand'   | t | json }};
 
     if (!bar) return;
 
-    if (localStorage.getItem(storageKey) === 'dismissed') {
-      bar.hidden = true;
-      return;
+    function setCollapsed(collapsed) {
+      bar.classList.toggle('announcement-bar--collapsed', collapsed);
+      if (btn) {
+        btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+        btn.setAttribute('aria-label', collapsed ? labelExpand : labelCollapse);
+      }
+    }
+
+    if (localStorage.getItem(key) === 'collapsed') {
+      setCollapsed(true);
     }
 
     if (btn) {
       btn.addEventListener('click', function () {
-        bar.hidden = true;
-        localStorage.setItem(storageKey, 'dismissed');
+        var nowCollapsed = !bar.classList.contains('announcement-bar--collapsed');
+        setCollapsed(nowCollapsed);
+        if (nowCollapsed) {
+          localStorage.setItem(key, 'collapsed');
+        } else {
+          localStorage.removeItem(key);
+        }
       });
     }
   })();
@@ -63,6 +75,8 @@
   .announcement-bar {
     background-color: var(--announcement-bg);
     color: var(--announcement-text);
+    overflow: hidden;
+    transition: padding var(--duration-fast) var(--ease-out);
   }
 
   .announcement-bar__inner {
@@ -72,6 +86,7 @@
     gap: var(--space-3);
     padding-block: var(--space-3);
     position: relative;
+    transition: padding var(--duration-fast) var(--ease-out);
   }
 
   .announcement-bar__message {
@@ -80,6 +95,7 @@
     text-align: center;
     color: inherit;
     max-width: none;
+    transition: opacity var(--duration-fast) var(--ease-out);
   }
 
   a.announcement-bar__message:hover {
@@ -87,19 +103,42 @@
     color: inherit;
   }
 
-  .announcement-bar__dismiss {
+  /* ── Toggle button ── */
+
+  .announcement-bar__toggle {
     position: absolute;
     right: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    padding: var(--space-1);
     color: inherit;
     opacity: 0.7;
     transition: opacity var(--duration-fast) var(--ease-out);
   }
 
-  .announcement-bar__dismiss:hover {
+  .announcement-bar__toggle:hover {
     opacity: 1;
+  }
+
+  .announcement-bar__toggle svg {
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  /* ── Collapsed state ── */
+
+  .announcement-bar--collapsed .announcement-bar__inner {
+    padding-block: var(--space-1);
+  }
+
+  .announcement-bar--collapsed .announcement-bar__message {
+    visibility: hidden;
+    width: 0;
+    overflow: hidden;
+  }
+
+  .announcement-bar--collapsed .announcement-bar__toggle svg {
+    transform: rotate(180deg);
   }
 {% endstyle %}
 
@@ -122,8 +161,8 @@
     },
     {
       "type": "checkbox",
-      "id": "show_dismiss",
-      "label": "Show dismiss button",
+      "id": "show_toggle",
+      "label": "Show collapse toggle",
       "default": true
     },
     {
