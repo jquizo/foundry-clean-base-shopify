@@ -103,6 +103,16 @@
       "login": "Log in",
       "account": "My Account"
     },
+    "slideshow": {
+      "previous_slide": "Previous slide",
+      "next_slide": "Next slide",
+      "go_to_slide": "Go to slide {{ index }}"
+    },
+    "newsletter": {
+      "email_label": "Email address",
+      "email_placeholder": "your@email.com",
+      "success": "Thanks for subscribing!"
+    },
     "cart": {
       "title": "Your cart"
     },
