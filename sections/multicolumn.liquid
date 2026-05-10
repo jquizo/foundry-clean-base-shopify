@@ -1,0 +1,164 @@
+{%- comment -%} sections/multicolumn.liquid {%- endcomment -%}
+
+<section class="multicolumn" data-section-id="{{ section.id }}">
+  <div class="container">
+
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="mcol__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mcol__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="mcol__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mcol__grid">
+      {%- for block in section.blocks -%}
+        <div class="mcol__item" {{ block.shopify_attributes }}>
+
+          {%- if block.settings.image != blank -%}
+            <div class="mcol__image-wrap">
+              {{
+                block.settings.image
+                | image_url: width: 160
+                | image_tag:
+                  alt: block.settings.image.alt | default: block.settings.heading,
+                  loading: 'lazy'
+              }}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.heading != blank -%}
+            <h3 class="mcol__item-heading">{{ block.settings.heading }}</h3>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            <div class="rte">{{ block.settings.text }}</div>
+          {%- endif -%}
+
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% style %}
+  .multicolumn {
+    padding-block: var(--section-padding-block);
+  }
+
+  .mcol__header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .mcol__heading {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+
+  .mcol__subheading {
+    font-size: var(--text-lg);
+    color: var(--color-text-subtle);
+    line-height: var(--leading-relaxed);
+    margin-top: var(--space-4);
+    max-width: 56ch;
+    margin-inline: auto;
+  }
+
+  .mcol__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .mcol__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .mcol__image-wrap {
+    height: 64px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mcol__image-wrap img {
+    max-height: 64px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .mcol__item-heading {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--leading-snug);
+    color: var(--color-text);
+    margin: 0;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Multicolumn",
+  "tag": "section",
+  "class": "section-multicolumn",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "placeholder": "Why choose us"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "placeholder": "A short line supporting your heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image or icon"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Feature"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share a key benefit or feature of your product or service.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multicolumn",
+      "blocks": [
+        { "type": "column" },
+        { "type": "column" },
+        { "type": "column" }
+      ]
+    }
+  ]
+}
+{% endschema %}
