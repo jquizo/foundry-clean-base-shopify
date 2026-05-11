@@ -5,5 +5,12 @@
 # when the CLI watcher picks them up mid-save.
 **/*.tmp*
 
-# AI planning docs
-docs/superpowers/
+# Non-theme root files
+README.md
+.gitignore
+
+# Docs and planning
+docs/
+
+# Reference directory — not part of the deployable theme
+foundry-clean-base/
