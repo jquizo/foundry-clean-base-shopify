@@ -512,7 +512,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-animate]').forEach(el => {
+      if (prefersReduced) {
+        el.classList.add('is-visible');
+      } else {
+        observer.observe(el);
+      }
+    });
   }
 
 });
