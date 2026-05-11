@@ -3,7 +3,6 @@
 {%- if section.settings.message != blank -%}
   <div
     class="announcement-bar"
-    data-announcement-bar
     style="
       --announcement-bg: {{ section.settings.background_color }};
       --announcement-text: {{ section.settings.text_color }};
@@ -20,44 +19,10 @@
         <p class="announcement-bar__message">{{ section.settings.message }}</p>
       {%- endif -%}
 
-      {%- if section.settings.show_dismiss -%}
-        <button
-          type="button"
-          class="announcement-bar__dismiss"
-          data-announcement-dismiss
-          aria-label="{{ 'sections.announcement_bar.dismiss' | t }}"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      {%- endif -%}
     </div>
   </div>
 {%- endif -%}
 
-<script>
-  (function () {
-    var bar = document.querySelector('[data-announcement-bar]');
-    var btn = document.querySelector('[data-announcement-dismiss]');
-    var storageKey = 'foundry-announcement-{{ section.id }}';
-
-    if (!bar) return;
-
-    if (localStorage.getItem(storageKey) === 'dismissed') {
-      bar.hidden = true;
-      return;
-    }
-
-    if (btn) {
-      btn.addEventListener('click', function () {
-        bar.hidden = true;
-        localStorage.setItem(storageKey, 'dismissed');
-      });
-    }
-  })();
-</script>
 
 {% style %}
   .announcement-bar {
@@ -71,7 +36,6 @@
     justify-content: center;
     gap: var(--space-3);
     padding-block: var(--space-3);
-    position: relative;
   }
 
   .announcement-bar__message {
@@ -87,20 +51,6 @@
     color: inherit;
   }
 
-  .announcement-bar__dismiss {
-    position: absolute;
-    right: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: inherit;
-    opacity: 0.7;
-    transition: opacity var(--duration-fast) var(--ease-out);
-  }
-
-  .announcement-bar__dismiss:hover {
-    opacity: 1;
-  }
 {% endstyle %}
 
 {% schema %}
@@ -119,12 +69,6 @@
       "type": "url",
       "id": "link",
       "label": "Link (optional)"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_dismiss",
-      "label": "Show dismiss button",
-      "default": true
     },
     {
       "type": "color",
