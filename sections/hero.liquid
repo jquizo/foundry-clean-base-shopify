@@ -15,6 +15,29 @@
       assign btn_padding   = 'var(--space-3) var(--space-8)'
       assign btn_font_size = 'var(--text-sm)'
   endcase
+  case section.settings.button_style
+    when 'outline'
+      assign btn_primary_bg           = 'transparent'
+      assign btn_primary_color        = section.settings.text_color
+      assign btn_primary_border       = section.settings.text_color
+      assign btn_primary_hover_bg     = section.settings.text_color
+      assign btn_primary_hover_color  = section.settings.bg_color
+      assign btn_primary_hover_border = section.settings.text_color
+    when 'ghost'
+      assign btn_primary_bg           = 'transparent'
+      assign btn_primary_color        = section.settings.text_color
+      assign btn_primary_border       = 'transparent'
+      assign btn_primary_hover_bg     = section.settings.text_color | color_modify: 'alpha', 0.1
+      assign btn_primary_hover_color  = section.settings.text_color
+      assign btn_primary_hover_border = section.settings.text_color
+    else
+      assign btn_primary_bg           = 'var(--color-btn-bg)'
+      assign btn_primary_color        = 'var(--color-btn-text)'
+      assign btn_primary_border       = 'var(--color-btn-bg)'
+      assign btn_primary_hover_bg     = 'var(--color-btn-bg-hover)'
+      assign btn_primary_hover_color  = 'var(--color-btn-text)'
+      assign btn_primary_hover_border = 'var(--color-btn-bg-hover)'
+  endcase
 -%}
 
 <section
@@ -262,15 +285,15 @@
   }
 
   .btn--primary {
-    background: var(--color-btn-bg);
-    color: var(--color-btn-text);
-    border-color: var(--color-btn-bg);
+    background: {{ btn_primary_bg }};
+    color: {{ btn_primary_color }};
+    border-color: {{ btn_primary_border }};
   }
 
   .btn--primary:hover {
-    background: var(--color-btn-bg-hover);
-    border-color: var(--color-btn-bg-hover);
-    color: var(--color-btn-text);
+    background: {{ btn_primary_hover_bg }};
+    border-color: {{ btn_primary_hover_border }};
+    color: {{ btn_primary_hover_color }};
   }
 
   .btn--secondary {
@@ -384,6 +407,17 @@
         { "value": "small",  "label": "Small" },
         { "value": "medium", "label": "Medium" },
         { "value": "large",  "label": "Large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Primary button style",
+      "default": "filled",
+      "options": [
+        { "value": "filled",  "label": "Filled" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "ghost",   "label": "Ghost" }
       ]
     },
     {
